@@ -1,6 +1,6 @@
 # Estacionamento
 
-App criado para digitalizar um processo que era feito manualmente por planilha impressa. 
+App criado para digitalizar um processo que era feito manualmente por planilha impressa. Criei o aplicativo para praticar o conhecimento de Flutter e banco de dados Sqlite, aprendidos por videoaulas da Alura e do Prof. Jamilton Damasceno (Udemy). A versão deste repositório foi atualizada para rodar integralmente no Firebase e ter atualização em tempo real, o que foi um desafio para eu aprender a como salvar e especialmente, tratar os dados recebidos das coleções.
 
 
 ## Funcionalidades
