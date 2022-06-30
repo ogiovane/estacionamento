@@ -8,8 +8,6 @@ import 'package:open_file/open_file.dart';
 
 import '../models/record.dart';
 
-
-
 class ExportLog extends StatefulWidget {
   @override
   State<ExportLog> createState() => _ExportLogState();
@@ -86,7 +84,7 @@ class _ExportLogState extends State<ExportLog> {
     );
   }
 
-  Future<void> createExcel() async{
+  Future<void> createExcel() async {
     // getRecordsFirestore();
 
     final xls.Workbook workbook = xls.Workbook();
@@ -98,21 +96,24 @@ class _ExportLogState extends State<ExportLog> {
     sheet.getRangeByName('G1:G100').cellStyle.bold = true;
     sheet.getRangeByName('I1:I100').cellStyle.bold = true;
 
-    sheet.getRangeByName('A3').setText('Início:', );
+    sheet.getRangeByName('A3').setText(
+          'Início:',
+        );
     sheet.getRangeByName('B3').setText(_dataDigitada.text);
 
-    for(int i = 0; i < _result.length; i++){
-      sheet.getRangeByName('A${i+5}').setText('Nome:', );
-      sheet.getRangeByName('B${i+5}').setText('${_result[i].proprietario}');
-      sheet.getRangeByName('C${i+5}').setText('Placa/Prefixo:');
-      sheet.getRangeByName('D${i+5}').setText('${_result[i].placa}');
-      sheet.getRangeByName('E${i+5}').setText('Modelo:');
-      sheet.getRangeByName('F${i+5}').setText('${_result[i].modelo}');
-      sheet.getRangeByName('G${i+5}').setText('Destino:');
-      sheet.getRangeByName('H${i+5}').setText('${_result[i].destino}');
-      sheet.getRangeByName('I${i+5}').setText('Hora:');
-      sheet.getRangeByName('J${i+5}').setText('${_result[i].hora}');
-
+    for (int i = 0; i < _result.length; i++) {
+      sheet.getRangeByName('A${i + 5}').setText(
+            'Nome:',
+          );
+      sheet.getRangeByName('B${i + 5}').setText('${_result[i].proprietario}');
+      sheet.getRangeByName('C${i + 5}').setText('Placa/Prefixo:');
+      sheet.getRangeByName('D${i + 5}').setText('${_result[i].placa}');
+      sheet.getRangeByName('E${i + 5}').setText('Modelo:');
+      sheet.getRangeByName('F${i + 5}').setText('${_result[i].modelo}');
+      sheet.getRangeByName('G${i + 5}').setText('Destino:');
+      sheet.getRangeByName('H${i + 5}').setText('${_result[i].destino}');
+      sheet.getRangeByName('I${i + 5}').setText('Hora:');
+      sheet.getRangeByName('J${i + 5}').setText('${_result[i].hora}');
     }
 
     final List<int> bytes = workbook.saveAsStream();
@@ -125,13 +126,14 @@ class _ExportLogState extends State<ExportLog> {
     OpenFile.open(fileName);
   }
 
-  Future<void> getRecordsFirestore() async{
+  Future<void> getRecordsFirestore() async {
     var data = await FirebaseFirestore.instance
         .collection("log")
         .where("data", isGreaterThanOrEqualTo: _dataDigitada.text)
         .orderBy("data", descending: false)
+        .orderBy("hora", descending: false)
         .get();
 
-      _result = List.from(data.docs.map((doc) => Record.fromSnapshot(doc)));
+    _result = List.from(data.docs.map((doc) => Record.fromSnapshot(doc)));
   }
 }

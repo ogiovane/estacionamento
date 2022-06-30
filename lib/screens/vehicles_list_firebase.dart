@@ -30,8 +30,13 @@ class _VehiclesListFirebaseState extends State<VehiclesListFirebase> {
         child: ListView.builder(
           itemCount: _result.length,
           itemBuilder: (context, index) {
-            return VehicleCard(
-              _result[index] as Vehicle,
+            return GestureDetector(
+              child: VehicleCard(
+                _result[index] as Vehicle,
+                ),
+              onTap: (){
+                print('fui clicado! INDEX ${index}');
+              },
             );
           },
         ),

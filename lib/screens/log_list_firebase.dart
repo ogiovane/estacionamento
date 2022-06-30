@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estacionamento/screens/log_card_firebase.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models/record.dart';
 
 class LogList extends StatefulWidget {
@@ -12,7 +13,7 @@ class LogList extends StatefulWidget {
 
 class _LogListState extends State<LogList> {
   List<Object> _result = [];
-  var _proprietario, _placa, _modelo, _destino, _hora, _data;
+  final _dataDigitada = DateFormat('dd/MM/yy').format(DateTime.now());
 
   @override
   void didChangeDependencies() {
@@ -24,7 +25,7 @@ class _LogListState extends State<LogList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Histórico'),
+        title: const Text('Registros do dia'),
       ),
       body: SafeArea(
         child: ListView.builder(
@@ -39,22 +40,13 @@ class _LogListState extends State<LogList> {
     );
   }
 
-
   Future getRecordsFirestore() async {
+    // print('DATA DIGITADA = ${_dataDigitada}');
     var data = await FirebaseFirestore.instance
-        .collection('log')
-        .orderBy('createdAt', descending: false)
+        .collection("log")
+        .where("data", isGreaterThanOrEqualTo: _dataDigitada)
+        .orderBy("data", descending: false)
         .get();
-    //     .then((QuerySnapshot querySnapshot) {
-    //   querySnapshot.docs.forEach((element) {
-    //     _proprietario = element['proprietario'];
-    //     _placa = element['placa'];
-    //     _modelo = element['modelo'];
-    //     _destino = element['destino'];
-    //     _hora = element['hora'];
-    //     _data = element['data'];
-    //     });
-    // });
 
     setState(() {
       _result = List.from(data.docs.map((doc) => Record.fromSnapshot(doc)));

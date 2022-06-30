@@ -74,6 +74,7 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: TextFormField(
+                  textCapitalization: TextCapitalization.characters,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "Veículo",
@@ -90,6 +91,7 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: TextFormField(
+                  textCapitalization: TextCapitalization.characters,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "Proprietário",
@@ -107,6 +109,7 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: TextFormField(
                   textCapitalization: TextCapitalization.characters,
+                  keyboardType: TextInputType.datetime,
                   autofocus: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -142,6 +145,7 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: TextFormField(
                   textCapitalization: TextCapitalization.characters,
+                  keyboardType: TextInputType.datetime,
                   autofocus: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),

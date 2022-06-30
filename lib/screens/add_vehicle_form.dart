@@ -42,7 +42,7 @@ class _AddVehicleFormState extends State<AddVehicleForm> {
                     controller: _placaController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Placa',
+                      labelText: 'Placa',
                     ),
                     textCapitalization: TextCapitalization.characters,
                     validator: (String? value) {
@@ -58,7 +58,7 @@ class _AddVehicleFormState extends State<AddVehicleForm> {
                       controller: _modeloController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Modelo',
+                        labelText: 'Modelo',
                       ),
                       textCapitalization: TextCapitalization.characters,
                       validator: (String? value) {
@@ -75,7 +75,7 @@ class _AddVehicleFormState extends State<AddVehicleForm> {
                       controller: _proprietarioController,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Proprietário',
+                        labelText: 'Proprietário',
                       ),
                       textCapitalization: TextCapitalization.characters,
                       validator: (String? value) {
