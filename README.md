@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Estacionamento
 
 App criado para digitalizar um processo que era feito manualmente por planilha impressa. Criei o aplicativo para praticar o conhecimento de Flutter e banco de dados Sqlite, aprendidos por videoaulas da Alura e do Prof. Jamilton Damasceno (Udemy). A versão deste repositório foi atualizada para rodar integralmente no Firebase e ter atualização em tempo real, o que foi um desafio para eu aprender a como salvar e especialmente, tratar os dados recebidos das coleções.
@@ -24,21 +23,3 @@ App criado para digitalizar um processo que era feito manualmente por planilha i
 ![Screenshot_20220624-144309](https://user-images.githubusercontent.com/86842589/175617822-87c920db-c8dc-42a1-8920-58e56bc18450.jpg)
 ![Screenshot_20220624-144318](https://user-images.githubusercontent.com/86842589/175617823-03074270-3450-47f5-b2d8-ef8a8b6cddb8.jpg)
 ![Screenshot_20220624-144326](https://user-images.githubusercontent.com/86842589/175617824-422d21c0-cae7-4bc5-8c50-57c5e16135dd.jpg)
-=======
-# estacionamento
-
-by Giovane Sesquim
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
->>>>>>> f52b7b9 (Versão funcional rodando no Firebase)
