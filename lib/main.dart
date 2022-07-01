@@ -1,5 +1,6 @@
 import 'package:estacionamento/firebase_options.dart';
 import 'package:estacionamento/screens/dashboard2.dart';
+import 'package:estacionamento/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         Locale('en', '')
       ],
       debugShowCheckedModeBanner: false,
-      home: Dashboard2(),
+      home: LoginPage(),
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         // fontFamily: 'OpenSans',

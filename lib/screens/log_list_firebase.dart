@@ -40,13 +40,22 @@ class _LogListState extends State<LogList> {
     );
   }
 
+  getStartOfToday() {
+    var now = DateTime.now();
+    var nowTimestamp = Timestamp.fromDate(now);
+    return nowTimestamp;
+  }
+
   Future getRecordsFirestore() async {
+    var date1 = DateTime.now();
     // print('DATA DIGITADA = ${_dataDigitada}');
     var data = await FirebaseFirestore.instance
         .collection("log")
-        .where("data", isGreaterThanOrEqualTo: _dataDigitada)
-        .orderBy("data", descending: false)
+        .where("dateTime", isGreaterThanOrEqualTo: getStartOfToday())
+        .orderBy("dateTime", descending: false)
         .get();
+
+    print('TAMANHO DO RESULTADO = ${data.size}');
 
     setState(() {
       _result = List.from(data.docs.map((doc) => Record.fromSnapshot(doc)));

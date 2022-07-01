@@ -5,6 +5,7 @@ import 'package:estacionamento/screens/new_register_form.dart';
 import 'package:estacionamento/screens/log_list_firebase.dart';
 import 'package:estacionamento/screens/under_maintence.dart';
 import 'package:estacionamento/screens/vehicles_list_firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'export_log_firebase.dart';

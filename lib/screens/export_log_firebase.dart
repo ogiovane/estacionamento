@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xls;
@@ -16,11 +17,20 @@ class ExportLog extends StatefulWidget {
 class _ExportLogState extends State<ExportLog> {
   List<Record> _result = [];
   var _dataDigitada = TextEditingController(
-      text: DateFormat('dd/MM/yy').format(DateTime.now()));
+      text:
+          '${DateTime.now().day.toString().padLeft(2, '0')}/${DateTime.now().month.toString().padLeft(2, '0')}/${DateTime.now().year} - ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}h');
+
+  DateTime dateTime = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
 
   @override
   Widget build(BuildContext context) {
-    getRecordsFirestore();
+    // getRecordsFirestore();
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +43,7 @@ class _ExportLogState extends State<ExportLog> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Escolha a data de início:'),
+              Text('Escolha a data e hora de início:', style: TextStyle(fontSize: 16)),
               Padding(
                 padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                 child: TextFormField(
@@ -41,28 +51,18 @@ class _ExportLogState extends State<ExportLog> {
                   autofocus: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Data',
+                      // labelText: 'Data',
                       suffixIcon: IconButton(
                         icon: Icon(Icons.calendar_today),
                         onPressed: () async {
-                          final data = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2022),
-                            lastDate: DateTime(2023),
-                            locale: Locale("pt", "BR"),
-                          );
+                          pickDateTime();
 
-                          setState(() {
-                            _dataDigitada.text =
-                                DateFormat('dd/MM/yy').format(data!);
-                          });
                         },
                       )),
                   controller: _dataDigitada,
-                  validator: (String? value) {
+                  validator: (value) {
                     if (value!.isEmpty || value.length < 5) {
-                      return 'Minímo de 5 caracteres';
+                      return 'Formato incorreto';
                     }
                     return null;
                   },
@@ -85,7 +85,8 @@ class _ExportLogState extends State<ExportLog> {
   }
 
   Future<void> createExcel() async {
-    // getRecordsFirestore();
+    await getRecordsFirestore();
+    // print('DATE TIME = ${Timestamp.fromDate(dateTime).microsecondsSinceEpoch}');
 
     final xls.Workbook workbook = xls.Workbook();
     final xls.Worksheet sheet = workbook.worksheets[0];
@@ -113,8 +114,10 @@ class _ExportLogState extends State<ExportLog> {
       sheet.getRangeByName('G${i + 5}').setText('Destino:');
       sheet.getRangeByName('H${i + 5}').setText('${_result[i].destino}');
       sheet.getRangeByName('I${i + 5}').setText('Hora:');
-      sheet.getRangeByName('J${i + 5}').setText('${_result[i].hora}');
+      sheet.getRangeByName('J${i + 5}').setText('${DateFormat('HH:mm').format(DateTime.fromMicrosecondsSinceEpoch(_result[i].dateTime.microsecondsSinceEpoch))}');
     }
+
+
 
     final List<int> bytes = workbook.saveAsStream();
     workbook.dispose();
@@ -127,13 +130,54 @@ class _ExportLogState extends State<ExportLog> {
   }
 
   Future<void> getRecordsFirestore() async {
+    var timestamp = Timestamp.fromDate(dateTime);
+
     var data = await FirebaseFirestore.instance
         .collection("log")
-        .where("data", isGreaterThanOrEqualTo: _dataDigitada.text)
-        .orderBy("data", descending: false)
-        .orderBy("hora", descending: false)
+        .where("dateTime", isGreaterThanOrEqualTo: timestamp)
+        .orderBy("dateTime", descending: false)
+        // .orderBy("hora", descending: false)
         .get();
 
+    print('TAMANHO DO RESULTADO = ${data.size}');
     _result = List.from(data.docs.map((doc) => Record.fromSnapshot(doc)));
+
+  }
+
+  Future pickDateTime() async {
+    DateTime? date = await pickDate();
+    if (date == null) return;
+
+    TimeOfDay? time = await pickTime();
+    if (time == null) return;
+
+    final newDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    setState(() {
+      dateTime = newDateTime;
+      _dataDigitada.text =
+          '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year} - ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}h';
+    });
+
+  }
+
+  Future<DateTime?> pickDate() {
+    return showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2025),
+      locale: Locale("pt", "BR"),
+    );
+  }
+
+  Future<TimeOfDay?> pickTime() {
+    return showTimePicker(context: context, initialTime: TimeOfDay.now());
   }
 }

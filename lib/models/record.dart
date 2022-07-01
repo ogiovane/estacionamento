@@ -5,21 +5,18 @@ class Record {
   String placa;
   String modelo;
   String destino;
-  String data;
-  String hora;
+  Timestamp dateTime;
   Timestamp createdAt;
   String tipo;
 
-  Record(this.proprietario, this.placa, this.modelo, this.destino, this.data,
-      this.hora, this.createdAt, this.tipo);
+  Record(this.proprietario, this.placa, this.modelo, this.destino, this.dateTime, this.createdAt, this.tipo);
 
   Map<String, dynamic> toJson() => {
         'proprietario': proprietario,
         'placa': placa,
         'modelo': modelo,
         'destino': destino,
-        'data': data,
-        'hora': hora,
+        'dateTime': dateTime,
         'createdAt': createdAt,
         'tipo': tipo
       };
@@ -29,8 +26,7 @@ class Record {
         placa = snapshot.data()['placa'],
         modelo = snapshot.data()['modelo'],
         destino = snapshot.data()['destino'],
-        data = snapshot.data()['data'],
-        hora = snapshot.data()['hora'],
+        dateTime = snapshot.data()['dateTime'],
         createdAt = snapshot.data()['createdAt'],
         tipo = snapshot.data()['tipo'] ?? 'carro';
 }

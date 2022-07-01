@@ -6,33 +6,33 @@ double _tamanhoFonte = 18.0;
 
 enum Destino { primeiro, bac, saida }
 
+
 class NewRegisterForm extends StatefulWidget {
   @override
   State<NewRegisterForm> createState() => _NewRegisterFormState();
 }
 
 class _NewRegisterFormState extends State<NewRegisterForm> {
+  DateTime dateTime = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    DateTime.now().hour,
+    DateTime.now().minute,
+  );
+
   var _placaDigitada = TextEditingController();
   var _modeloVeiculo = TextEditingController();
   var _proprietario = TextEditingController();
-  var _dataDigitada = TextEditingController(
-      text: DateFormat('dd/MM/yy').format(DateTime.now()));
-  var _horaDigitada =
-      TextEditingController(text: DateFormat('HH:mm').format(DateTime.now()));
+  var _dataDigitada = TextEditingController(text: '${DateTime.now().day.toString().padLeft(2, '0')}/${DateTime.now().month.toString().padLeft(2, '0')}/${DateTime.now().year}');
+  var _horaDigitada = TextEditingController(text: '${DateTime.now().hour}:${DateTime.now().minute.toString().padLeft(2, '0')}');
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-
-  List<Object> _result = [];
 
   Destino _destino = Destino.primeiro;
   var _destinoConv = "";
   var _tipo = "";
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    getVehicleFromFirestore();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,6 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
               TextFormField(
                 textCapitalization: TextCapitalization.characters,
                 autofocus: true,
-                // initialValue: 'Oie',
-                // maxLength: 7,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Placa",
@@ -117,17 +115,20 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                       suffixIcon: IconButton(
                         icon: Icon(Icons.calendar_today),
                         onPressed: () async {
-                          final data = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2022),
-                            lastDate: DateTime(2023),
-                            locale: Locale("pt", "BR"),
+                          final date = await pickDate();
+                          if (date == null) return; // Cancel
+
+                          final newDateTime = DateTime(
+                            date.year,
+                            date.month,
+                            date.day,
+                            dateTime.hour,
+                            dateTime.minute,
                           );
 
                           setState(() {
-                            _dataDigitada.text =
-                                DateFormat('dd/MM/yy').format(data!);
+                            _dataDigitada.text = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+                            dateTime = newDateTime;
                           });
                         },
                       )),
@@ -153,13 +154,21 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                       suffixIcon: IconButton(
                         icon: Icon(Icons.access_time_outlined),
                         onPressed: () async {
-                          final TimeOfDay? result = await showTimePicker(
-                              context: context, initialTime: TimeOfDay.now());
-                          if (result != null) {
-                            setState(() {
-                              _horaDigitada.text = result.format(context);
-                            });
-                          }
+                          final time = await pickTime();
+                          if(time == null) return; // pressed CANCEL
+
+                          final newDateTime = DateTime(
+                            dateTime.year,
+                            dateTime.month,
+                            dateTime.day,
+                            time.hour,
+                            time.minute,
+                          );
+
+                          setState(() {
+                            _horaDigitada.text = '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+                            dateTime = newDateTime;
+                          });
                         },
                       )),
                   controller: _horaDigitada,
@@ -245,17 +254,12 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                     if (!_formKey.currentState!.validate()) {
                       setState(() => _autoValidate = AutovalidateMode.disabled);
                     } else {
-                      print(
-                          '\n ${_proprietario.text} / ${_placaDigitada.text} / ${_modeloVeiculo.text} / ${_destinoConv} / '
-                          '${_dataDigitada.text} / ${_horaDigitada.text} ');
-
                       Map<String, dynamic> newRecord = {
                         "proprietario": _proprietario.text,
                         "placa": _placaDigitada.text,
                         "modelo": _modeloVeiculo.text,
                         "destino": _destinoConv,
-                        "data": _dataDigitada.text,
-                        "hora": _horaDigitada.text,
+                        "dateTime": dateTime,
                         "createdAt": DateTime.now(),
                         "tipo": _tipo,
                       };
@@ -263,10 +267,6 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                       FirebaseFirestore.instance
                           .collection("log")
                           .add(newRecord);
-
-                      // _daoRecord
-                      //     .save(newRecord)
-                      //     .then((id) => Navigator.pop(context, newRecord));
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -301,4 +301,21 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
       });
     });
   }
+
+  Future<DateTime?> pickDate() {
+    return showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2025),
+      locale: Locale("pt", "BR"),
+    );
+  }
+
+  Future<TimeOfDay?> pickTime(){
+    return showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now());
+  }
+
 }

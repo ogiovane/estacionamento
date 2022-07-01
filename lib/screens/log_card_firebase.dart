@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../models/record.dart';
 
@@ -38,7 +39,7 @@ class RecordCard extends StatelessWidget {
               'Proprietário:\t ${_record.proprietario}\n'
               'Modelo:\t ${_record.modelo}\n'
               'Destino:\t ${_record.destino}\n'
-                  'Data:\t ${_record.data} - ${_record.hora}h',
+                  'Data:\t ${DateFormat('dd/MM/yyyy - hh:mm').format(DateTime.fromMicrosecondsSinceEpoch(_record.dateTime.microsecondsSinceEpoch))}h',
               style: TextStyle(
                 fontSize: 18.0,
               ),
