@@ -1,5 +1,4 @@
 class Vehicle {
-  // int? id;
   String? placa;
   String? modelo;
   String? proprietario;

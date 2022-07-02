@@ -1,5 +1,4 @@
 import 'package:estacionamento/firebase_options.dart';
-import 'package:estacionamento/screens/dashboard2.dart';
 import 'package:estacionamento/screens/login_page.dart';
 import 'package:estacionamento/widgets/Utils.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +38,6 @@ class MyApp extends StatelessWidget {
       home: LoginPage(),
       theme: ThemeData(
         primarySwatch: Colors.indigo,
-        // fontFamily: 'OpenSans',
-
-
       ),
     );
   }

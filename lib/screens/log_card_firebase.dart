@@ -44,10 +44,6 @@ class RecordCard extends StatelessWidget {
                 fontSize: 18.0,
               ),
             ),
-            // Text(
-            //   '${_record.proprietario}',
-            //   style: TextStyle(fontSize: 18.0),
-            // ),
           ],
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,

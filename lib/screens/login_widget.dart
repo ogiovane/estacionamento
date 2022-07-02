@@ -1,12 +1,10 @@
 import 'package:estacionamento/widgets/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../main.dart';
 import '../widgets/forgot_password_page.dart';
 
 class LoginWidget extends StatefulWidget {
-  const LoginWidget({Key? key}) : super(key: key);
 
   @override
   State<LoginWidget> createState() => _LoginWidgetState();
@@ -21,7 +19,6 @@ class _LoginWidgetState extends State<LoginWidget> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-
     super.dispose();
   }
 

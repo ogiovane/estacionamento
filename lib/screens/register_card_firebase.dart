@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../models/vehicle.dart';
 
 class RegisterCard extends StatelessWidget {

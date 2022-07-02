@@ -15,6 +15,7 @@ class ExportLog extends StatefulWidget {
 }
 
 class _ExportLogState extends State<ExportLog> {
+  final formKey = GlobalKey<FormState>();
   List<Record> _result = [];
   var _dataDigitada = TextEditingController(
       text:
@@ -40,44 +41,48 @@ class _ExportLogState extends State<ExportLog> {
         padding: const EdgeInsets.all(20.0),
         child: Container(
           alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Escolha a data e hora de início:', style: TextStyle(fontSize: 16)),
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: TextFormField(
-                  textCapitalization: TextCapitalization.characters,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      // labelText: 'Data',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.calendar_today),
-                        onPressed: () async {
-                          pickDateTime();
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Escolha a data e hora de início:', style: TextStyle(fontSize: 16)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.characters,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        // labelText: 'Data',
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          onPressed: () async {
+                            pickDateTime();
 
-                        },
-                      )),
-                  controller: _dataDigitada,
-                  validator: (value) {
-                    if (value!.isEmpty || value.length < 5) {
-                      return 'Formato incorreto';
-                    }
-                    return null;
-                  },
+                          },
+                        )),
+                    controller: _dataDigitada,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 6) {
+                        return 'Formato incorreto. Selecione pelo calendário';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: double.maxFinite,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.green[700]),
-                  child: Text('Exportar para Excel'),
-                  onPressed: createExcel,
+                SizedBox(
+                  width: double.maxFinite,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.green[700]),
+                    child: Text('Exportar para Excel'),
+                    onPressed: createExcel,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -86,7 +91,6 @@ class _ExportLogState extends State<ExportLog> {
 
   Future<void> createExcel() async {
     await getRecordsFirestore();
-    // print('DATE TIME = ${Timestamp.fromDate(dateTime).microsecondsSinceEpoch}');
 
     final xls.Workbook workbook = xls.Workbook();
     final xls.Worksheet sheet = workbook.worksheets[0];
@@ -97,15 +101,11 @@ class _ExportLogState extends State<ExportLog> {
     sheet.getRangeByName('G1:G100').cellStyle.bold = true;
     sheet.getRangeByName('I1:I100').cellStyle.bold = true;
 
-    sheet.getRangeByName('A3').setText(
-          'Início:',
-        );
+    sheet.getRangeByName('A3').setText('Início:');
     sheet.getRangeByName('B3').setText(_dataDigitada.text);
 
     for (int i = 0; i < _result.length; i++) {
-      sheet.getRangeByName('A${i + 5}').setText(
-            'Nome:',
-          );
+      sheet.getRangeByName('A${i + 5}').setText('Nome:');
       sheet.getRangeByName('B${i + 5}').setText('${_result[i].proprietario}');
       sheet.getRangeByName('C${i + 5}').setText('Placa/Prefixo:');
       sheet.getRangeByName('D${i + 5}').setText('${_result[i].placa}');
@@ -116,8 +116,6 @@ class _ExportLogState extends State<ExportLog> {
       sheet.getRangeByName('I${i + 5}').setText('Hora:');
       sheet.getRangeByName('J${i + 5}').setText('${DateFormat('HH:mm').format(DateTime.fromMicrosecondsSinceEpoch(_result[i].dateTime.microsecondsSinceEpoch))}');
     }
-
-
 
     final List<int> bytes = workbook.saveAsStream();
     workbook.dispose();
@@ -139,7 +137,6 @@ class _ExportLogState extends State<ExportLog> {
         // .orderBy("hora", descending: false)
         .get();
 
-    print('TAMANHO DO RESULTADO = ${data.size}');
     _result = List.from(data.docs.map((doc) => Record.fromSnapshot(doc)));
 
   }

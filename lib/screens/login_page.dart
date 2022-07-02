@@ -1,4 +1,4 @@
-import 'package:estacionamento/screens/dashboard2.dart';
+import 'package:estacionamento/screens/dashboard.dart';
 import 'package:estacionamento/screens/login_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

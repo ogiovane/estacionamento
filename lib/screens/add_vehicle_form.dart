@@ -2,17 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:estacionamento/models/vehicle.dart';
 import 'package:flutter/material.dart';
 
-double _tamanhoFonte = 18.0;
-
 enum TipoVeiculo { carro, moto }
 
 class AddVehicleForm extends StatefulWidget {
+
+
   @override
   State<AddVehicleForm> createState() => _AddVehicleFormState();
 }
 
 class _AddVehicleFormState extends State<AddVehicleForm> {
   final _formKey = GlobalKey<FormState>();
+  double _tamanhoFonte = 18.0;
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final _placaController = TextEditingController();
   final _modeloController = TextEditingController();
@@ -162,10 +163,7 @@ class _AddVehicleFormState extends State<AddVehicleForm> {
                               ),
                             );
                             Navigator.pop(context, newVehicle);
-                            print(
-                                '${_placaController.text}, ${_proprietarioController.text}, ${_modeloController.text}, ${_tipoVeiculoConv}');
-                          }
-                          ;
+                          };
                         },
                         child: const Text('Salvar'),
                       ),

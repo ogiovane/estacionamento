@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-double _tamanhoFonte = 18.0;
-
 enum Destino { primeiro, bac, saida }
 
 
@@ -21,6 +19,7 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
     DateTime.now().minute,
   );
 
+  double _tamanhoFonte = 18.0;
   var _placaDigitada = TextEditingController();
   var _modeloVeiculo = TextEditingController();
   var _proprietario = TextEditingController();
@@ -28,7 +27,6 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
   var _horaDigitada = TextEditingController(text: '${DateTime.now().hour}:${DateTime.now().minute.toString().padLeft(2, '0')}');
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-
   Destino _destino = Destino.primeiro;
   var _destinoConv = "";
   var _tipo = "";
@@ -44,7 +42,7 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
       body: SafeArea(
         child: Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.disabled,
+          autovalidateMode: _autoValidate,
           child: ListView(
             padding: EdgeInsets.all(40),
             children: [
@@ -134,8 +132,8 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                       )),
                   controller: _dataDigitada,
                   validator: (String? value) {
-                    if (value!.isEmpty || value.length < 5) {
-                      return 'Minímo de 5 caracteres';
+                    if (value!.isEmpty || value.length < 6) {
+                      return 'Formato inválido. Utilize o calendário ao lado.';
                     }
                     return null;
                   },
@@ -173,8 +171,8 @@ class _NewRegisterFormState extends State<NewRegisterForm> {
                       )),
                   controller: _horaDigitada,
                   validator: (String? value) {
-                    if (value!.isEmpty || value.length < 5) {
-                      return 'Minímo de 5 caracteres';
+                    if (value!.isEmpty || value.length < 4) {
+                      return 'Formato inválido. Utilize o relógio ao lado.';
                     }
                     return null;
                   },
