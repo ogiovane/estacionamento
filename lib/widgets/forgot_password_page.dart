@@ -1,7 +1,6 @@
 import 'package:estacionamento/widgets/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../main.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -102,5 +101,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       Utils.showSnackBar(error.message);
       Navigator.of(context).pop();
     }
+
   }
 }

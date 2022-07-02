@@ -41,7 +41,7 @@ class _LogListState extends State<LogList> {
   }
 
   getStartOfToday() {
-    var now = DateTime.now();
+    var now = DateTime.now().subtract(Duration(days: 1));
     var nowTimestamp = Timestamp.fromDate(now);
     return nowTimestamp;
   }
